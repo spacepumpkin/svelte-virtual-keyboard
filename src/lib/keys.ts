@@ -26,6 +26,21 @@ const keyed = (
     ignoreValue,
   };
 };
+const row0 = [
+  keyed("1", "!"),
+  keyed("2", "@"),
+  keyed("3", "#"),
+  keyed("4", "$"),
+  keyed("5", "%"),
+  keyed("6", "^"),
+  keyed("7", "&"),
+  keyed("8", "*"),
+  keyed("9", "("),
+  keyed("0", ")"),
+  keyed("-", "_"),
+  keyed("=", "+"),
+  keyed("BACKSPACE", undefined, undefined),
+];
 
 const row1 = [
   keyed("q"),
@@ -40,6 +55,7 @@ const row1 = [
   keyed("p"),
   keyed("[", "{"),
   keyed("]", "}"),
+  keyed("\\", "|"),
 ];
 
 const row2 = [
@@ -54,6 +70,7 @@ const row2 = [
   keyed("l"),
   keyed(";", ":"),
   keyed("'", '"'),
+  keyed("ENTER", "\n", "\n"),
 ];
 
 const row3 = [
@@ -70,6 +87,6 @@ const row3 = [
   keyed("/", "?"),
 ];
 
-const row4 = [keyed("SPACEBAR", " ", " ")];
+const row4 = [keyed("SPACE", " ", " ")];
 
-export const keyRows = [row1, row2, row3, row4];
+export const keyRows = [row0, row1, row2, row3, row4];

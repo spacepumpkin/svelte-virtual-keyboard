@@ -1,10 +1,14 @@
 <!-- BASIC FUNCTIONALITY -->
-<!-- Clicking Shift does not register text input -->
-<!-- Key presses highlights key -->
-<!-- Key clicks highlights key -->
-<!-- Keyboard presses matches up with clicks -->
+<!-- ✓ Key presses highlights key -->
+<!-- ✓ Key clicks highlights key -->
+<!-- ✓ Key presses matches up with clicks -->
+<!-- ✓ Output of key presses and clicks are shown as text -->
+<!-- ✓ Clicking Shift does not register text input -->
 
 <!-- ADVANCED -->
+<!-- ✓ Pressing or clicking Backspace deletes a character -->
+<!-- ✓ Pressing or clicking Enter enters a newline -->
+<!-- Holding shift and pressing a key that has a different symbol still highlights the key -->
 <!-- Clicking Shift enables shift, so that the next key click OR press is uppercased -->
 <!-- Clicking or pressing Shift when shift is enabled disables shift -->
 <!-- Clicking or pressing Caps Lock enables caps lock for clicks -->
@@ -18,8 +22,12 @@
   let keypresses = $state([]);
   $inspect(currentPressedKeys);
 
-  const updateKeypresses = (key: string) => {
+  const addKeypress = (key: string) => {
     keypresses.push(key);
+  };
+
+  const delKeypress = () => {
+    keypresses.pop();
   };
 
   const onMouseDown = (keyConfig: KeyConfig, shiftPressed = false) => {
@@ -30,10 +38,17 @@
       shiftPressed = true;
       return;
     }
+
+    const isBackspace = keyConfig.value === "backspace";
+    if (isBackspace) {
+      delKeypress();
+      return;
+    }
+
     if (shiftPressed) {
-      updateKeypresses(keyConfig.upper);
+      addKeypress(keyConfig.upper);
     } else {
-      updateKeypresses(keyConfig.value);
+      addKeypress(keyConfig.value);
     }
   };
 
@@ -50,15 +65,27 @@
 
     currentPressedKeys.add(event.key.toLowerCase());
 
+    const isBackspace = event.key.toLowerCase() === "backspace";
+    if (isBackspace) {
+      delKeypress();
+      return;
+    }
+
+    const isEnter = event.key.toLowerCase() === "enter";
+    if (isEnter) {
+      addKeypress("\n");
+      return;
+    }
+
     const isModifierKey = event.key.length !== 1;
     if (isModifierKey) {
       return;
     }
 
     if (event.shiftKey) {
-      updateKeypresses(event.key.toUpperCase());
+      addKeypress(event.key.toUpperCase());
     } else {
-      updateKeypresses(event.key);
+      addKeypress(event.key);
     }
   };
 
@@ -82,7 +109,7 @@
         tabindex="-1"
         class={currentPressedKeys.has(keyConfig.value) ? "pressed" : ""}
         onmousedown={(event) => onMouseDown(keyConfig, event.shiftKey)}
-        onmouseup={(event) => onMouseUp(keyConfig)}
+        onmouseup={() => onMouseUp(keyConfig)}
       >
         {#if shiftPressed && keyConfig.value !== " "}
           {keyConfig.upper}
@@ -94,7 +121,7 @@
   </div>
 {/each}
 
-<div class="text-container">{keypresses.join(" ")}</div>
+<div class="text-container">{keypresses.join("")}</div>
 
 <style>
   .text-container {
