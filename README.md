@@ -2,18 +2,17 @@
 
 Generated via instructions [here](https://svelte.dev/blog/svelte-for-new-developers)
 
-## Setup
-
 ```shell
 npm create vite@latest keyboard-svelte -- --template svelte
 cd keyboard-svelte
 npm install
 ```
 
-## Running locally
+## Setup & Running locally
 
 ```shell
 nvm use 18
+npm install
 npm run dev
 # Running on localhost:5173
 ```
