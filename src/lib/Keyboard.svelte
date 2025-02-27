@@ -1,5 +1,4 @@
 <!-- BASIC FUNCTIONALITY -->
-<!-- Pressing Spacebar when focused on something does not register space text input -->
 <!-- Clicking Shift does not register text input -->
 <!-- Key presses highlights key -->
 <!-- Key clicks highlights key -->
@@ -56,12 +55,6 @@
       return;
     }
 
-    const hasFocus =
-      !!document.activeElement && document.activeElement !== document.body;
-    const isClickEquivalent = event.key === " " || event.key === "Enter";
-    if (isClickEquivalent && hasFocus) {
-      event.preventDefault(); // prevent
-    }
     if (event.shiftKey) {
       updateKeypresses(event.key.toUpperCase());
     } else {
@@ -86,6 +79,7 @@
   <div>
     {#each keyRow as keyConfig}
       <button
+        tabindex="-1"
         class={currentPressedKeys.has(keyConfig.value) ? "pressed" : ""}
         onmousedown={(event) => onMouseDown(keyConfig, event.shiftKey)}
         onmouseup={(event) => onMouseUp(keyConfig)}
