@@ -8,7 +8,8 @@
 <!-- ADVANCED -->
 <!-- ✓ Pressing or clicking Backspace deletes a character -->
 <!-- ✓ Pressing or clicking Enter enters a newline -->
-<!-- Holding shift and pressing a key that has a different symbol still highlights the key -->
+<!-- ✓ Holding shift and pressing a key that has a different symbol still highlights the key -->
+<!---- BUG: if shift is released before the modified key is released, the keyup event handles the unmodified key instead and the key stays green -->
 <!-- Clicking Shift enables shift, so that the next key click OR press is uppercased -->
 <!-- Clicking or pressing Shift when shift is enabled disables shift -->
 <!-- Clicking or pressing Caps Lock enables caps lock for clicks -->
@@ -108,7 +109,11 @@
       <button
         tabindex="-1"
         class={[
-          currentPressedKeys.has(keyConfig.value) ? "pressed" : "",
+          currentPressedKeys.has(keyConfig.value) ||
+          currentPressedKeys.has(keyConfig.label.toLowerCase()) ||
+          currentPressedKeys.has(keyConfig.upper)
+            ? "pressed"
+            : "",
           keyConfig.value === " " ? "spacebar" : "",
         ]}
         onmousedown={(event) => onMouseDown(keyConfig, event.shiftKey)}
