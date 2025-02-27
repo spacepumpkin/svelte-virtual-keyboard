@@ -27,6 +27,7 @@ jobs:
       - name: Set up
         run: |
           echo Starting build and deployment...
+          npm install
           npm run build
 
       - name: Deploy with gh-pages
