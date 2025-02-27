@@ -1,6 +1,8 @@
-# Basic Keyboard made with Svelte
+# Basic Virtual Keyboard made with Svelte
 
 Generated via instructions [here](https://svelte.dev/blog/svelte-for-new-developers)
+
+## Setup
 
 ```shell
 npm create vite@latest keyboard-svelte -- --template svelte
@@ -13,4 +15,23 @@ npm install
 ```shell
 nvm use 18
 npm run dev
+# Running on localhost:5173
 ```
+
+<!-- ## Functionality -->
+
+<!-- BASIC FUNCTIONALITY -->
+<!-- ✓ Key presses highlights key -->
+<!-- ✓ Key clicks highlights key -->
+<!-- ✓ Key presses matches up with clicks -->
+<!-- ✓ Output of key presses and clicks are shown as text -->
+<!-- ✓ Clicking Shift does not register text input -->
+
+<!-- ADVANCED -->
+<!-- ✓ Pressing or clicking Backspace deletes a character -->
+<!-- ✓ Pressing or clicking Enter enters a newline -->
+<!-- ✓ Holding shift and pressing a key that has a different symbol still highlights the key -->
+<!---- BUG: if shift is released before the modified key is released, the keyup event handles the unmodified key instead and the key stays green -->
+<!-- Clicking Shift enables shift, so that the next key click OR press is uppercased -->
+<!-- Clicking or pressing Shift when shift is enabled disables shift -->
+<!-- Clicking or pressing Caps Lock enables caps lock for clicks -->
