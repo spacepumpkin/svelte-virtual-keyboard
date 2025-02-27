@@ -107,11 +107,14 @@
     {#each keyRow as keyConfig}
       <button
         tabindex="-1"
-        class={currentPressedKeys.has(keyConfig.value) ? "pressed" : ""}
+        class={[
+          currentPressedKeys.has(keyConfig.value) ? "pressed" : "",
+          keyConfig.value === " " ? "spacebar" : "",
+        ]}
         onmousedown={(event) => onMouseDown(keyConfig, event.shiftKey)}
         onmouseup={() => onMouseUp(keyConfig)}
       >
-        {#if shiftPressed && keyConfig.value !== " "}
+        {#if shiftPressed && !["\n", " "].includes(keyConfig.value)}
           {keyConfig.upper}
         {:else}
           {keyConfig.label}
@@ -127,9 +130,15 @@
   .text-container {
     margin-top: 5em;
     white-space: pre-wrap;
-    max-width: 95vw;
+    width: 100%;
     height: 200px;
     overflow-y: auto;
+    scrollbar-width: thin;
+    scrollbar-gutter: stable;
+  }
+
+  .spacebar {
+    width: 300px;
   }
 
   .pressed {
