@@ -3,6 +3,7 @@
   import { SvelteSet } from "svelte/reactivity";
 
   let shiftPressed = $state(false);
+  let capsLockOn = $state(false);
   let currentPressedKeys = $state(new SvelteSet());
   let keypresses = $state([]);
 
@@ -11,6 +12,15 @@
 
   const onMouseDown = (keyConfig: KeyConfig, shiftPressed = false) => {
     currentPressedKeys.add(keyConfig.value);
+
+    const isCapsLockClicked = keyConfig.value === "capslock";
+    if (isCapsLockClicked) {
+      capsLockOn = !capsLockOn;
+      if (!capsLockOn) {
+        currentPressedKeys.delete("capslock");
+      }
+      return;
+    }
 
     const isShiftKeyClicked = keyConfig.value === "shift";
     if (isShiftKeyClicked) {
@@ -24,7 +34,7 @@
       return;
     }
 
-    if (shiftPressed) {
+    if (shiftPressed || capsLockOn) {
       addKeypress(keyConfig.upper);
     } else {
       addKeypress(keyConfig.value);
@@ -32,32 +42,39 @@
   };
 
   const onMouseUp = (keyConfig: KeyConfig) => {
+    const isCapsLockClicked = keyConfig.value === "capslock";
+    if (isCapsLockClicked) {
+      return;
+    }
+
     currentPressedKeys.delete(keyConfig.value);
   };
 
   const onKeyDown = (event: KeyboardEvent) => {
-    if (event.shiftKey) {
+    const key = event.key.toLowerCase();
+    currentPressedKeys.add(key);
+
+    if (key === "shift") {
       shiftPressed = true;
-    } else if (shiftPressed) {
-      shiftPressed = false;
+    }
+    if (key === "capslock") {
+      capsLockOn = true;
     }
 
-    currentPressedKeys.add(event.key.toLowerCase());
-
-    const isBackspace = event.key.toLowerCase() === "backspace";
+    const isBackspace = key === "backspace";
     if (isBackspace) {
       delKeypress();
       return;
     }
 
-    const isEnter = event.key.toLowerCase() === "enter";
+    const isEnter = key === "enter";
     if (isEnter) {
       event.preventDefault();
       addKeypress("\n");
       return;
     }
 
-    const isTab = event.key.toLowerCase() === "tab";
+    const isTab = key === "tab";
     if (isTab) {
       event.preventDefault();
       addKeypress("\t");
@@ -69,7 +86,7 @@
       return;
     }
 
-    if (event.shiftKey) {
+    if (shiftPressed || capsLockOn) {
       addKeypress(event.key.toUpperCase());
     } else {
       addKeypress(event.key);
@@ -77,10 +94,15 @@
   };
 
   const onKeyUp = (event: KeyboardEvent) => {
-    if (event.key === "Shift") {
+    // Note on CapsLock: apparently only fires keydown when turned on, and only fires keyup when turned off
+
+    const key = event.key.toLowerCase();
+    if (key === "shift") {
       shiftPressed = false;
     }
-    const key = event.key.toLowerCase();
+    if (key === "capslock") {
+      capsLockOn = false;
+    }
     currentPressedKeys.delete(key);
 
     /**
@@ -132,7 +154,7 @@
         onmousedown={(event) => onMouseDown(keyConfig, event.shiftKey)}
         onmouseup={() => onMouseUp(keyConfig)}
       >
-        {#if shiftPressed && !["\n", " ", "\t"].includes(keyConfig.value)}
+        {#if (shiftPressed || capsLockOn) && !["\n", " ", "\t"].includes(keyConfig.value)}
           {keyConfig.upper}
         {:else}
           {keyConfig.label}

@@ -60,6 +60,7 @@ const row1 = [
 ];
 
 const row2 = [
+  keyed("CAPS", "CAPS", "capslock", true),
   keyed("a"),
   keyed("s"),
   keyed("d"),
