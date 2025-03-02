@@ -5,15 +5,9 @@
   let shiftPressed = $state(false);
   let currentPressedKeys = $state(new SvelteSet());
   let keypresses = $state([]);
-  $inspect(currentPressedKeys);
 
-  const addKeypress = (key: string) => {
-    keypresses.push(key);
-  };
-
-  const delKeypress = () => {
-    keypresses.pop();
-  };
+  const addKeypress = (key: string) => keypresses.push(key);
+  const delKeypress = () => keypresses.pop();
 
   const onMouseDown = (keyConfig: KeyConfig, shiftPressed = false) => {
     currentPressedKeys.add(keyConfig.value);
@@ -78,7 +72,35 @@
     if (event.key === "Shift") {
       shiftPressed = false;
     }
-    currentPressedKeys.delete(event.key.toLowerCase());
+    const key = event.key.toLowerCase();
+    currentPressedKeys.delete(key);
+
+    /**
+     * Hacky fix for when the keyDown key doesn't match the keyUp key when shift is released
+     */
+    const deleteOtherKey = () => {
+      const keyConfig = keyRows.flat().find((keyConfig) => {
+        const keyLabel = keyConfig.label.toLowerCase();
+        if (keyLabel === key) {
+          return true;
+        }
+        const keyValue = keyConfig.value;
+        if (keyValue === key) {
+          return true;
+        }
+        const keyUpper = keyConfig.upper;
+        if (keyUpper === key) {
+          console.log({ key, keyUpper });
+          return true;
+        }
+      });
+      if (keyConfig) {
+        currentPressedKeys.delete(keyConfig.label.toLowerCase());
+        currentPressedKeys.delete(keyConfig.value);
+        currentPressedKeys.delete(keyConfig.upper);
+      }
+    };
+    deleteOtherKey();
   };
 
   document.addEventListener("keydown", onKeyDown);

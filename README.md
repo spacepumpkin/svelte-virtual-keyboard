@@ -28,7 +28,6 @@ npm run dev
 <!-- ✓ Pressing or clicking Backspace deletes a character -->
 <!-- ✓ Pressing or clicking Enter enters a newline -->
 <!-- ✓ Holding shift and pressing a key that has a different symbol still highlights the key -->
-<!---- BUG: if shift is released before the modified key is released, the keyup event handles the unmodified key instead and the key stays green -->
 <!-- Clicking Shift enables shift, so that the next key click OR press is uppercased -->
 <!-- Clicking or pressing Shift when shift is enabled disables shift -->
 <!-- Clicking or pressing Caps Lock enables caps lock for clicks -->
