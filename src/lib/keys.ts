@@ -43,6 +43,7 @@ const row0 = [
 ];
 
 const row1 = [
+  keyed("TAB", "\t", "\t"),
   keyed("q"),
   keyed("w"),
   keyed("e"),

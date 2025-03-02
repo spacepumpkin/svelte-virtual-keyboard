@@ -52,7 +52,15 @@
 
     const isEnter = event.key.toLowerCase() === "enter";
     if (isEnter) {
+      event.preventDefault();
       addKeypress("\n");
+      return;
+    }
+
+    const isTab = event.key.toLowerCase() === "tab";
+    if (isTab) {
+      event.preventDefault();
+      addKeypress("\t");
       return;
     }
 
@@ -90,7 +98,6 @@
         }
         const keyUpper = keyConfig.upper;
         if (keyUpper === key) {
-          console.log({ key, keyUpper });
           return true;
         }
       });
@@ -125,7 +132,7 @@
         onmousedown={(event) => onMouseDown(keyConfig, event.shiftKey)}
         onmouseup={() => onMouseUp(keyConfig)}
       >
-        {#if shiftPressed && !["\n", " "].includes(keyConfig.value)}
+        {#if shiftPressed && !["\n", " ", "\t"].includes(keyConfig.value)}
           {keyConfig.upper}
         {:else}
           {keyConfig.label}
