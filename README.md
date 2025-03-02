@@ -1,19 +1,16 @@
 # Basic Virtual Keyboard made with Svelte
 
-Generated via instructions [here](https://svelte.dev/blog/svelte-for-new-developers)
-
-## Setup
+Jumpstarted via instructions [here](https://svelte.dev/blog/svelte-for-new-developers)
 
 ```shell
-npm create vite@latest keyboard-svelte -- --template svelte
-cd keyboard-svelte
-npm install
+npm create vite@latest svelte-virtual-keyboard -- --template svelte
 ```
 
-## Running locally
+## Setup & Running locally
 
 ```shell
 nvm use 18
+npm install
 npm run dev
 # Running on localhost:5173
 ```
